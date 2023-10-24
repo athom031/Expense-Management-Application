@@ -9,6 +9,8 @@ const ExistingUsers = () => {
     const [editUser, setEditUser] = useState(false);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [message, setMessage] = useState('');
+    const [isSuccess, setIsSuccess] = useState(false);
 
     const fetchUsers = () => {
         getAllRows(USER_TABLE).then((data) => setUsers(data));
@@ -23,6 +25,8 @@ const ExistingUsers = () => {
         setFirstName(user.user_first_name);
         setLastName(user.user_last_name);
         setEditUser(false);
+        setMessage('');
+        setIsSuccess(false);
     };
 
     const handleDeleteUser = (userId) => {
@@ -31,9 +35,13 @@ const ExistingUsers = () => {
             fetchUsers();
             setIsConfirmDelete(false);
             setSelectedUser(null);
+            setMessage('');
+            setIsSuccess(false);
         } else {
             setIsConfirmDelete(true);
             setEditUser(false);
+            setMessage('');
+            setIsSuccess(false);
         }
     };
 
@@ -44,6 +52,11 @@ const ExistingUsers = () => {
             fetchUsers();
             setSelectedUser(updatedUser);
             setEditUser(false);
+            setMessage(`${firstName} ${lastName} updated successfully`);
+            setIsSuccess(true);
+        } else {
+            setMessage('Please provide both first name and last name');
+            setIsSuccess(false);
         }
     };
 
@@ -76,6 +89,10 @@ const ExistingUsers = () => {
                                     <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                                     <button onClick={handleUpdateUser}>Update User</button>
                                 </div>
+                            )}
+                            {message && <p>{message}</p>}
+                            {isSuccess && (
+                                <button onClick={() => window.location.reload()}>Go back to User Management</button>
                             )}
                             {isConfirmDelete && (
                                 <div>

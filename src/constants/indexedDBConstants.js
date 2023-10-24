@@ -9,6 +9,12 @@ export const CATEGORY_TABLE = 'category_table';
 export const CATEGORY_ID = 'category_id';
 export const CATEGORY_NAME = 'category_name';
 
+export const CATEGORIES = {
+    0: 'Food',
+    1: 'Activity',
+    2: 'Office Equipment'
+};
+
 /** EXPENSE TABLE **/
 export const EXPENSE_TABLE = 'expense_table';
 // PRIMARY KEY

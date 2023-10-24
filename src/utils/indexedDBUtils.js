@@ -1,6 +1,27 @@
 // indexedDBUtils.js
 
-import { LEAN_DATA_DB, USER_TABLE, USER_FIRST_NAME, USER_LAST_NAME, USER_ID, READWRITE } from '../constants/indexedDBConstants';
+import { LEAN_DATA_DB, USER_TABLE, USER_FIRST_NAME, USER_LAST_NAME, USER_ID, READWRITE, CATEGORY_TABLE, CATEGORY_ID, EXPENSE_ID, CATEGORY_NAME, CATEGORIES, EXPENSE_TABLE, EXPENSE_DESCRIPTION, EXPENSE_COST } from '../constants/indexedDBConstants';
+
+const addCategoryTableIfNeeded = (db) => {
+    if(!db.objectStoreNames.contains(CATEGORY_TABLE)) {
+        const categoryStore = db.createObjectStore(CATEGORY_TABLE, {keyPath: CATEGORY_ID});
+        categoryStore.createIndex(CATEGORY_NAME, CATEGORY_NAME, {unique: false});
+
+        Object.entries(CATEGORIES).forEach(([key, value]) => {
+            addRow({ category_id: key, category_name: value }, CATEGORY_TABLE);
+        });
+    }
+}
+
+const addExpenseTableIfNeeded = (db) => {
+    if(!db.objectStoreNames.contains(EXPENSE_TABLE)) {
+        const expenseStore = db.createObjectStore(EXPENSE_TABLE, { keyPath: EXPENSE_ID});
+        expenseStore.createIndex(EXPENSE_COST, EXPENSE_COST, { unique: false });
+        expenseStore.createIndex(EXPENSE_DESCRIPTION, EXPENSE_DESCRIPTION, { unique: false });
+        expenseStore.createIndex(USER_ID, USER_ID, { unique: false });
+        expenseStore.createIndex(CATEGORY_ID, CATEGORY_ID, { unique: false});
+    }
+}
 
 const addUserTableIfNeeded = (db) => {
     if(!db.objectStoreNames.contains(USER_TABLE)) {
@@ -11,7 +32,6 @@ const addUserTableIfNeeded = (db) => {
 }
 
 // TOBEADDED: addExpenseTableIfNeeded
-// TOBEADDED: addCategoryTableIfNeeded
 
 export const openDB = () => {
     const request = window.indexedDB.open(LEAN_DATA_DB, 1);
@@ -19,7 +39,13 @@ export const openDB = () => {
     request.onupgradeneeded = function (event) {
         const db = event.target.result;
 
-        // Check if user_table object store already exists
+        // check if category_table object store already exists and add if needed
+        addCategoryTableIfNeeded(db);
+
+        // check if expense_table object store already exists and add if needed
+        addExpenseTableIfNeeded(db);
+
+        // Check if user_table object store already exists and add if needed
         addUserTableIfNeeded(db);
     };
 

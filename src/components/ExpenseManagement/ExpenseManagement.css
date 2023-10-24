@@ -1,0 +1,4 @@
+.select-dropdown {
+    min-height: 100px; /* Adjust the height based on your requirements */
+    overflow-y: auto;
+  }

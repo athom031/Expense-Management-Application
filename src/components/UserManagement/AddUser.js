@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
 import { USER_TABLE } from '../../constants/indexedDBConstants';
 import { addRow } from '../../utils/indexedDBUtils';
 
