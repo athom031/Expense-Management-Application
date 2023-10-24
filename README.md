@@ -42,6 +42,33 @@ To set up and run the application, follow these steps:
 **Expense Management**
 ![Expense Management Design](./public/design_img/expense_management_design.png)
 
+## Completed Project Status
+- [x] User Management:
+  - [x] Create, edit, and delete users
+  - [x] Input fields for First Name and Last Name
+  - [x] Validation for required fields
+  - [x] Display all users in a table
+  - [x] Reflect changes in related records
+
+- [x] Expense Management:
+  - [x] Create, edit, and delete expenses
+  - [x] Dropdowns for user and category selection
+  - [x] Input fields for expense description and cost
+  - [x] Validation for all fields
+  - [x] Display all expenses in a table
+  - [x] Update related data in users and company expenses
+
+- [x] Summary of Expenses:
+  - [x] Display total cost of expenses for each category
+
+- [x] Additional Notes:
+  - [x] Efficient data model structure
+  - [x] Optimized time complexity for actions
+  - [x] Large data set support
+  - [x] README file with project summary and design choices
+  - [x] Well-structured and organized code
+  - [x] Consideration of UI/UX
+
 ## Things To Add in Future
     - Currently code assumes only one page of browser is open at a time.
     - Supply more comprehensive visualiztions on the summary page
