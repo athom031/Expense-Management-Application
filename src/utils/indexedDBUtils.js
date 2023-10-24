@@ -123,24 +123,49 @@ export const updateRow = (table, row) => {
 
 export const getAllRows = (table) => {
     return new Promise((resolve, reject) => {
-        const request = openDB();
+      const request = openDB();
 
-        request.onsuccess = function (event) {
-            const objectStore = getRWObjectStore(event, table);
-            const users = [];
-            objectStore.openCursor().onsuccess = function (event) {
-                const cursor = event.target.result;
-                if (cursor) {
-                    users.push(cursor.value);
-                    cursor.continue();
-                } else {
-                    resolve(users);
-                }
-            };
+      request.onsuccess = function (event) {
+        const objectStore = getRWObjectStore(event, table);
+        const rows = {};
+        objectStore.openCursor().onsuccess = function (event) {
+          const cursor = event.target.result;
+          if (cursor) {
+            rows[cursor.key] = cursor.value;
+            cursor.continue();
+          } else {
+            resolve(rows);
+          }
         };
+      };
 
-        request.onerror = function (event) {
-            reject('Error opening database');
-        };
+      request.onerror = function (event) {
+        reject('Error opening database');
+      };
     });
 };
+
+export const getNameFromUserId = (userID) => {
+    return new Promise((resolve, reject) => {
+      const request = openDB();
+
+      request.onsuccess = function (event) {
+        const objectStore = getRWObjectStore(event, USER_TABLE);
+        const getRowRequest = objectStore.get(userID);
+
+        getRowRequest.onsuccess = function (event) {
+          resolve(`${event.target.result.user_first_name} ${event.target.result.user_last_name}`);
+        };
+
+        getRowRequest.onerror = function (event) {
+          console.log(`Error getting ${userID} in ${USER_TABLE}`);
+          reject('');
+        };
+      };
+
+      request.onerror = function (event) {
+        console.log('Error opening database');
+        reject('');
+      };
+    });
+  };

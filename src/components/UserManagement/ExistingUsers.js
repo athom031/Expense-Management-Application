@@ -3,7 +3,7 @@ import { getAllRows, deleteRow, updateRow } from '../../utils/indexedDBUtils';
 import { USER_TABLE } from '../../constants/indexedDBConstants';
 
 const ExistingUsers = () => {
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState({});
     const [selectedUser, setSelectedUser] = useState(null);
     const [isConfirmDelete, setIsConfirmDelete] = useState(false);
     const [editUser, setEditUser] = useState(false);
@@ -21,9 +21,9 @@ const ExistingUsers = () => {
     }, []);
 
     const handleUserClick = (user) => {
-        setSelectedUser(user);
-        setFirstName(user.user_first_name);
-        setLastName(user.user_last_name);
+        setSelectedUser(user[1]); // user[1] as the user object is now stored in the value of the hash map
+        setFirstName(user[1].user_first_name);
+        setLastName(user[1].user_last_name);
         setEditUser(false);
         setMessage('');
         setIsSuccess(false);
@@ -64,9 +64,9 @@ const ExistingUsers = () => {
         <div>
             <div style={{ display: 'flex' }}>
                 <div style={{ flex: 1, borderRight: '1px solid #ccc' }}>
-                    {users.map((user) => (
-                        <div key={user.user_id} onClick={() => handleUserClick(user)}>
-                            {user.user_first_name} {user.user_last_name}
+                    {Object.entries(users).map((user) => (
+                        <div key={user[0]} onClick={() => handleUserClick(user)}>
+                            {user[1].user_first_name} {user[1].user_last_name}
                         </div>
                     ))}
                 </div>

@@ -4,8 +4,8 @@ import { USER_TABLE, CATEGORY_TABLE, EXPENSE_TABLE } from '../../constants/index
 import { v4 as uuidv4 } from 'uuid';
 
 const AddExpense = () => {
-  const [users, setUsers] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [users, setUsers] = useState({});
+  const [categories, setCategories] = useState({});
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [description, setDescription] = useState('');
@@ -72,9 +72,9 @@ const AddExpense = () => {
             onChange={(e) => setSelectedUser(e.target.value)}
           >
             <option value="">Select User</option>
-            {users.map((user) => (
-              <option key={user.user_id} value={user.user_id}>
-                {user.user_first_name} {user.user_last_name}
+            {Object.entries(users).map((user) => (
+              <option key={user[0]} value={user[0]}>
+                {user[1].user_first_name} {user[1].user_last_name}
               </option>
             ))}
           </select>
@@ -89,9 +89,9 @@ const AddExpense = () => {
             onChange={(e) => setSelectedCategory(e.target.value)}
           >
             <option value="">Select Category</option>
-            {categories.map((category) => (
-              <option key={category.category_id} value={category.category_id}>
-                {category.category_name}
+            {Object.entries(categories).map((category) => (
+              <option key={category[0]} value={category[0]}>
+                {category[1].category_name}
               </option>
             ))}
           </select>
