@@ -11,11 +11,11 @@ function UserManagement() {
   };
 
   return (
-    <div>
+    <div className="user-management-container">
       {display === '' && (
-        <div>
-          <button onClick={() => handleButtonClick('existing')}>Existing Users</button>
-          <button onClick={() => handleButtonClick('add')}>Add New User</button>
+        <div className="user-management-button-container">
+          <button className="user-management-button" onClick={() => handleButtonClick('existing')}>Existing Users</button>
+          <button className="user-management-button" onClick={() => handleButtonClick('add')}>Add New User</button>
         </div>
       )}
       {display === 'existing' && <ExistingUsers />}

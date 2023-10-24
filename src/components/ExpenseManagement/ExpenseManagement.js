@@ -1,7 +1,7 @@
-import './ExpenseManagement.css';
 import React, { useState } from 'react';
 import ExistingExpenses from './ExistingExpenses';
 import AddExpense from './AddExpense';
+import './ExpenseManagement.css';
 
 function ExpenseManagement() {
   const [display, setDisplay] = useState('');
@@ -11,9 +11,9 @@ function ExpenseManagement() {
   };
 
   return (
-    <div>
+    <div className="expense-management-container">
       {display === '' && (
-        <div>
+        <div className="expense-management-buttons">
           <button onClick={() => handleButtonClick('existing')}>Existing Expenses</button>
           <button onClick={() => handleButtonClick('add')}>Add New Expense</button>
         </div>

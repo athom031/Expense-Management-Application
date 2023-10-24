@@ -1,0 +1,28 @@
+.expense-summary-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .expense-summary-heading {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .expense-summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  .expense-summary-table th,
+  .expense-summary-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+
+  .expense-summary-table th {
+    background-color: #f2f2f2;
+  }

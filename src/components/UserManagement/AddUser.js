@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { USER_TABLE } from '../../constants/indexedDBConstants';
 import { addRow } from '../../utils/indexedDBUtils';
+import './UserManagement.css';
 
 function AddUser() {
     const [firstName, setFirstName] = useState('');
@@ -37,22 +38,20 @@ function AddUser() {
     };
 
     return (
-        <div>
+        <div className="add-user-container">
             <h2>Add User</h2>
-            <form onSubmit={handleSubmit}>
+            <form className="add-user-form" onSubmit={handleSubmit}>
                 <label>
                     First Name:
                     <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                 </label>
-                <br />
                 <label>
                     Last Name:
                     <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                 </label>
-                <br />
                 <button type="submit">Submit</button>
             </form>
-            {message && <p>{message}</p>}
+            {message && <p className="message">{message}</p>}
             {isSuccess && (
                 <button onClick={() => window.location.reload()}>Go back to User Management</button>
             )}

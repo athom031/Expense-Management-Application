@@ -1,4 +1,84 @@
-.select-dropdown {
-    min-height: 100px; /* Adjust the height based on your requirements */
-    overflow-y: auto;
+
+
+  .expense-management-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .expense-management-buttons {
+    margin-bottom: 20px;
+  }
+
+  .expense-management-buttons button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+
+  .expense-management-buttons button:hover {
+    background-color: #45a049;
+  }
+
+  .expense-management-buttons button:focus {
+    outline: none;
+  }
+
+  .add-expense-container {
+    width: 50%;
+    margin: auto;
+  }
+
+  .add-expense-container h2 {
+    text-align: center;
+  }
+
+  .add-expense-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .add-expense-container label {
+    margin-top: 10px;
+  }
+
+  .add-expense-container select,
+  .add-expense-container input[type="text"],
+  .add-expense-container input[type="number"] {
+    padding: 8px;
+    margin: 5px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .add-expense-container button {
+    margin-top: 20px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .add-expense-container button:hover {
+    background-color: #45a049;
+  }
+
+  .add-expense-container button:focus {
+    outline: none;
+  }
+
+  .add-expense-container p {
+    text-align: center;
+    color: green;
+    margin-top: 10px;
   }

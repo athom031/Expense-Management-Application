@@ -59,7 +59,7 @@ const AddExpense = () => {
   };
 
   return (
-    <div>
+    <div className="add-expense-container">
       <h2>Add Expense</h2>
       {successMessage && <p>{successMessage}</p>}
       <form onSubmit={handleSubmit}>

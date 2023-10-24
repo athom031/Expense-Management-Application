@@ -16,8 +16,8 @@ function ExpenseSummary() {
   }, []);
 
   return (
-    <div>
-      <h2>Expenses Summary</h2>
+    <div className="expense-summary-container">
+      <h2 className="expense-summary-heading">Expenses Summary</h2>
       <table className="expense-summary-table">
         <thead>
           <tr>

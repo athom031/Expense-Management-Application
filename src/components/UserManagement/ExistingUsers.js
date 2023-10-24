@@ -73,49 +73,47 @@ const ExistingUsers = () => {
     };
 
     return (
-        <div>
-            <div style={{ display: 'flex' }}>
-                <div style={{ flex: 1, borderRight: '1px solid #ccc' }}>
-                    {Object.entries(users).map(([userID, user]) => (
-                        <div key={userID} onClick={() => handleUserClick([userID, user])}>
-                            {user.user_first_name} {user.user_last_name} - {user.totalExpenditure !== undefined && user.totalExpenditure !== null ? user.totalExpenditure : 'Loading...'}
-                        </div>
-                    ))}
-                </div>
-                <div style={{ flex: 1 }}>
-                    {selectedUser && (
-                        <div>
-                            <h3>Selected User:</h3>
-                            <p>
-                                {selectedUser.user_first_name} {selectedUser.user_last_name} - {userExpenditure[selectedUser.user_id] !== undefined && userExpenditure[selectedUser.user_id] !== null ? userExpenditure[selectedUser.user_id] : 'Loading...'}
-                            </p>
-                            {!editUser && !isConfirmDelete && (
-                                <div>
-                                    <button onClick={() => handleDeleteUser(selectedUser.user_id)}>Delete User</button>
-                                    <button onClick={() => setEditUser(true)}>Edit User</button>
-                                </div>
-                            )}
-                            {editUser && (
-                                <div>
-                                    <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                                    <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                                    <button onClick={handleUpdateUser}>Update User</button>
-                                </div>
-                            )}
-                            {message && <p>{message}</p>}
-                            {isSuccess && (
-                                <button onClick={() => window.location.reload()}>Go back to User Management</button>
-                            )}
-                            {isConfirmDelete && (
-                                <div>
-                                    Are you sure?
-                                    <button onClick={() => handleDeleteUser(selectedUser.user_id)}>Confirm</button>
-                                    <button onClick={() => setIsConfirmDelete(false)}>Cancel</button>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
+        <div className="existing-users-container">
+            <div className="existing-users-list">
+                {Object.entries(users).map(([userID, user]) => (
+                    <div className="existing-users-list-item" key={userID} onClick={() => handleUserClick([userID, user])}>
+                        {user.user_first_name} {user.user_last_name} - {user.totalExpenditure !== undefined && user.totalExpenditure !== null ? user.totalExpenditure : 'Loading...'}
+                    </div>
+                ))}
+            </div>
+            <div className="selected-user-details">
+                {selectedUser && (
+                    <div>
+                        <h3>Selected User:</h3>
+                        <p>
+                            {selectedUser.user_first_name} {selectedUser.user_last_name} - {userExpenditure[selectedUser.user_id] !== undefined && userExpenditure[selectedUser.user_id] !== null ? userExpenditure[selectedUser.user_id] : 'Loading...'}
+                        </p>
+                        {!editUser && !isConfirmDelete && (
+                            <div className="user-buttons">
+                                <button onClick={() => handleDeleteUser(selectedUser.user_id)}>Delete User</button>
+                                <button onClick={() => setEditUser(true)}>Edit User</button>
+                            </div>
+                        )}
+                        {editUser && (
+                            <div>
+                                <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                                <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                                <button onClick={handleUpdateUser}>Update User</button>
+                            </div>
+                        )}
+                        {message && <p>{message}</p>}
+                        {isSuccess && (
+                            <button onClick={() => window.location.reload()}>Go back to User Management</button>
+                        )}
+                        {isConfirmDelete && (
+                            <div className="confirm-buttons">
+                                Are you sure?
+                                <button onClick={() => handleDeleteUser(selectedUser.user_id)}>Confirm</button>
+                                <button onClick={() => setIsConfirmDelete(false)}>Cancel</button>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );
