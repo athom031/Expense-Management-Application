@@ -42,10 +42,10 @@ export const addRow = (row, table) => {
         const addRowRequest = objectStore.add(row);
 
         addRowRequest.onsuccess = function (event) {
-            console.log(`Successfully added ${row.toString()} in '${table}'`);
+            console.log(`Successfully added ${JSON.stringify(row)} in '${table}'`);
         }
         addRowRequest.onerror = function (event) {
-            console.error(`Error adding ${row.toString()} in '${table}'`);
+            console.error(`Error adding ${JSON.stringify(row)} in '${table}'`);
         }
     }
 
@@ -82,10 +82,10 @@ export const updateRow = (table, row) => {
         const updateRowRequest = objectStore.put(row);
 
         updateRowRequest.onsuccess = function (event) {
-            console.log(`Successfully updated ${row.toString()} in '${table}'`)
+            console.log(`Successfully updated ${JSON.stringify(row)} in '${table}'`)
         }
         updateRowRequest.onerror = function (event) {
-            console.log(`Error updating ${row.toString()} in ${table}`);
+            console.log(`Error updating ${JSON.stringify(row)} in ${table}`);
         }
     }
 
@@ -94,3 +94,27 @@ export const updateRow = (table, row) => {
     }
 
 }
+
+export const getAllRows = (table) => {
+    return new Promise((resolve, reject) => {
+        const request = openDB();
+
+        request.onsuccess = function (event) {
+            const objectStore = getRWObjectStore(event, table);
+            const users = [];
+            objectStore.openCursor().onsuccess = function (event) {
+                const cursor = event.target.result;
+                if (cursor) {
+                    users.push(cursor.value);
+                    cursor.continue();
+                } else {
+                    resolve(users);
+                }
+            };
+        };
+
+        request.onerror = function (event) {
+            reject('Error opening database');
+        };
+    });
+};
