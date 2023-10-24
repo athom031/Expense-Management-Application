@@ -2,6 +2,7 @@
 /** DB **/
 export const LEAN_DATA_DB = 'lean_data_db';
 export const READWRITE = 'readwrite';
+export const READONLY = 'readonly';
 
 /** CATEGORY TABLE **/
 export const CATEGORY_TABLE = 'category_table';

@@ -1,6 +1,6 @@
 // indexedDBUtils.js
 
-import { LEAN_DATA_DB, USER_TABLE, USER_FIRST_NAME, USER_LAST_NAME, USER_ID, READWRITE, CATEGORY_TABLE, CATEGORY_ID, EXPENSE_ID, CATEGORY_NAME, CATEGORIES, EXPENSE_TABLE, EXPENSE_DESCRIPTION, EXPENSE_COST } from '../constants/indexedDBConstants';
+import { LEAN_DATA_DB, USER_TABLE, USER_FIRST_NAME, USER_LAST_NAME, USER_ID, READWRITE, READONLY, CATEGORY_TABLE, CATEGORY_ID, EXPENSE_ID, CATEGORY_NAME, CATEGORIES, EXPENSE_TABLE, EXPENSE_DESCRIPTION, EXPENSE_COST } from '../constants/indexedDBConstants';
 
 const addCategoryTableIfNeeded = (db) => {
     if(!db.objectStoreNames.contains(CATEGORY_TABLE)) {
@@ -55,6 +55,14 @@ export const openDB = () => {
 const getRWObjectStore = (event, table) => {
     const db = event.target.result;
     const transaction = db.transaction([table], READWRITE);
+    const objectStore = transaction.objectStore(table);
+
+    return objectStore;
+}
+
+const getROObjectStore  = (event, table) => {
+    const db = event.target.result;
+    const transaction = db.transaction([table], READONLY);
     const objectStore = transaction.objectStore(table);
 
     return objectStore;
@@ -126,7 +134,7 @@ export const getAllRows = (table) => {
       const request = openDB();
 
       request.onsuccess = function (event) {
-        const objectStore = getRWObjectStore(event, table);
+        const objectStore = getROObjectStore(event, table);
         const rows = {};
         objectStore.openCursor().onsuccess = function (event) {
           const cursor = event.target.result;
@@ -150,7 +158,7 @@ export const getNameFromUserId = (userID) => {
       const request = openDB();
 
       request.onsuccess = function (event) {
-        const objectStore = getRWObjectStore(event, USER_TABLE);
+        const objectStore = getROObjectStore(event, USER_TABLE);
         const getRowRequest = objectStore.get(userID);
 
         getRowRequest.onsuccess = function (event) {
@@ -159,6 +167,79 @@ export const getNameFromUserId = (userID) => {
 
         getRowRequest.onerror = function (event) {
           console.log(`Error getting ${userID} in ${USER_TABLE}`);
+          reject('');
+        };
+      };
+
+      request.onerror = function (event) {
+        console.log('Error opening database');
+        reject('');
+      };
+    });
+  };
+
+  export const getTotalExpenditureByUserId = (userID) => {
+    return new Promise((resolve, reject) => {
+        const request = openDB();
+
+        request.onsuccess = function (event) {
+            const objectStore = getROObjectStore(event, EXPENSE_TABLE);
+            const expenses = [];
+            const expenseCursor = objectStore.index(USER_ID).openCursor(IDBKeyRange.only(userID));
+
+            expenseCursor.onsuccess = function (event) {
+                const cursor = event.target.result;
+                if (cursor) {
+                    expenses.push(cursor.value.expense_cost);
+                    cursor.continue();
+                } else {
+                    if (expenses.length === 0) {
+                        resolve(0); // Return 0 if no expenses found for the user
+                    } else {
+                        const totalExpenditure = expenses.reduce((total, cost) => total + parseFloat(cost), 0);
+                        resolve(totalExpenditure);
+                    }
+                }
+            };
+
+            expenseCursor.onerror = function (event) {
+                console.log(`Error getting expenses for ${userID} in ${EXPENSE_TABLE}`);
+                reject('');
+            };
+        };
+
+        request.onerror = function (event) {
+            console.log('Error opening database');
+            reject('');
+        };
+    });
+};
+
+export const deleteAllExpensesByUserId = (userID) => {
+    return new Promise((resolve, reject) => {
+      const request = openDB();
+
+      request.onsuccess = function (event) {
+        const objectStore = getRWObjectStore(event, EXPENSE_TABLE);
+        const expenses = [];
+
+        const expenseCursor = objectStore.index(USER_ID).openCursor(IDBKeyRange.only(userID));
+
+        expenseCursor.onsuccess = function (event) {
+          const cursor = event.target.result;
+          if (cursor) {
+            const deleteRequest = cursor.delete();
+            deleteRequest.onsuccess = function () {
+              expenses.push(cursor.value);
+              cursor.continue();
+            };
+          } else {
+            resolve(expenses);
+          }
+        };
+
+        expenseCursor.onerror = function (event) {
+          console.log(`Error deleting expenses for ${userID} in ${EXPENSE_TABLE}`);
           reject('');
         };
       };

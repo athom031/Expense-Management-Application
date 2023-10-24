@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAllRows, deleteRow, updateRow } from '../../utils/indexedDBUtils';
+import { getAllRows, deleteRow, updateRow, getTotalExpenditureByUserId, deleteAllExpensesByUserId } from '../../utils/indexedDBUtils';
 import { USER_TABLE } from '../../constants/indexedDBConstants';
 
 const ExistingUsers = () => {
@@ -11,32 +11,44 @@ const ExistingUsers = () => {
     const [lastName, setLastName] = useState('');
     const [message, setMessage] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
+    const [userExpenditure, setUserExpenditure] = useState({});
 
-    const fetchUsers = () => {
-        getAllRows(USER_TABLE).then((data) => setUsers(data));
+    const fetchUsers = async () => {
+        const data = await getAllRows(USER_TABLE);
+        const usersWithExpenditure = await Promise.all(
+            Object.entries(data).map(async ([userID, user]) => {
+                const totalExpenditure = await getTotalExpenditureByUserId(user.user_id);
+                return { ...user, totalExpenditure };
+            })
+        );
+        setUsers(usersWithExpenditure);
     };
 
     useEffect(() => {
         fetchUsers();
     }, []);
 
-    const handleUserClick = (user) => {
-        setSelectedUser(user[1]); // user[1] as the user object is now stored in the value of the hash map
+    const handleUserClick = async (user) => {
+        setSelectedUser(user[1]);
         setFirstName(user[1].user_first_name);
         setLastName(user[1].user_last_name);
         setEditUser(false);
         setMessage('');
         setIsSuccess(false);
+
+        const totalExpenditure = await getTotalExpenditureByUserId(user[1].user_id);
+        setUserExpenditure({ ...userExpenditure, [user[1].user_id]: totalExpenditure });
     };
 
-    const handleDeleteUser = (userId) => {
+    const handleDeleteUser = async (userID) => {
         if (isConfirmDelete) {
-            deleteRow(USER_TABLE, userId);
+            deleteRow(USER_TABLE, userID);
             fetchUsers();
             setIsConfirmDelete(false);
             setSelectedUser(null);
             setMessage('');
             setIsSuccess(false);
+            await deleteAllExpensesByUserId(userID);
         } else {
             setIsConfirmDelete(true);
             setEditUser(false);
@@ -64,9 +76,9 @@ const ExistingUsers = () => {
         <div>
             <div style={{ display: 'flex' }}>
                 <div style={{ flex: 1, borderRight: '1px solid #ccc' }}>
-                    {Object.entries(users).map((user) => (
-                        <div key={user[0]} onClick={() => handleUserClick(user)}>
-                            {user[1].user_first_name} {user[1].user_last_name}
+                    {Object.entries(users).map(([userID, user]) => (
+                        <div key={userID} onClick={() => handleUserClick([userID, user])}>
+                            {user.user_first_name} {user.user_last_name} - {user.totalExpenditure !== undefined && user.totalExpenditure !== null ? user.totalExpenditure : 'Loading...'}
                         </div>
                     ))}
                 </div>
@@ -75,7 +87,7 @@ const ExistingUsers = () => {
                         <div>
                             <h3>Selected User:</h3>
                             <p>
-                                {selectedUser.user_first_name} {selectedUser.user_last_name}
+                                {selectedUser.user_first_name} {selectedUser.user_last_name} - {userExpenditure[selectedUser.user_id] !== undefined && userExpenditure[selectedUser.user_id] !== null ? userExpenditure[selectedUser.user_id] : 'Loading...'}
                             </p>
                             {!editUser && !isConfirmDelete && (
                                 <div>
