@@ -250,3 +250,43 @@ export const deleteAllExpensesByUserId = (userID) => {
       };
     });
   };
+
+  export const getTotalExpensesByCategory = () => {
+    return new Promise((resolve, reject) => {
+        const request = openDB();
+        let categoryExpenses = {};
+
+        request.onsuccess = function (event) {
+            const objectStore = getROObjectStore(event, EXPENSE_TABLE);
+
+            Object.keys(CATEGORIES).forEach(categoryId => {
+                categoryExpenses[CATEGORIES[categoryId]] = 0;
+            });
+
+            const cursorRequest = objectStore.openCursor();
+            cursorRequest.onsuccess = function (event) {
+                const cursor = event.target.result;
+                if (cursor) {
+                    const { category_id, expense_cost } = cursor.value;
+                    const categoryName = CATEGORIES[category_id];
+                    if (categoryName !== undefined) {
+                        categoryExpenses[categoryName] += parseFloat(expense_cost);
+                    }
+                    cursor.continue();
+                } else {
+                    resolve(categoryExpenses);
+                }
+            };
+
+            cursorRequest.onerror = function (event) {
+                console.log('Error opening expense cursor:', event.target.error);
+                reject('');
+            };
+        };
+
+        request.onerror = function (event) {
+            console.log('Error opening database');
+            reject('');
+        };
+    });
+};
