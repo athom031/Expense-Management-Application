@@ -1,70 +1,43 @@
-# Getting Started with Create React App
+# Expense Management Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project provides an expense management application that allows users to create, edit, and delete both users and expenses. The application uses a series of indexedDB stores to reliably save user and expense data. These stores are linked by matching keys, enabling efficient CRUD operations.
 
-## Available Scripts
+## Data Structures and Algorithms
 
-In the project directory, you can run:
+To ensure scalability and support CRUD operations effectively, the application utilizes the following data structure:
 
-### `npm start`
+- **Expense Data:** Each expense has a:
+    - expense_id (unique_id)
+    - category_id (mapping to category_table)
+    - user_id (mapping to user_table)
+    - expense_description
+    - expense_cost
+- **User Data:** Each user has a:
+    - user_id (unique_id)
+    - user_first_name
+    - user_last_name
+- **Category Data:** Each category has a:
+    - category_id (unique_id)
+    - category_name
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+I decided to use UUIDs as unique keys for users and expenses, as using datetime as a unique key could have led to conflicts when multiple users and expenses Ire added. This approach ensures that each user and expense has a unique identifier, allowing for scalable CRUD operations that meet the project objectives.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Considerations
 
-### `npm test`
+During the implementation, I carefully considered the performance implications and trade-offs. Although the application is designed for efficient CRUD operations, it is important to note potential limitations and constraints, particularly concerning scalability and performance with a growing user base and increasing expense data.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Application Setup
 
-### `npm run build`
+To set up and run the application, follow these steps:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Clone the repository to your local machine.
+2. Install the necessary dependencies using `npm install`.
+3. Run the application using `npm start`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Design
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**User Management**
+![User Management Design](./public/design_img/user_management_design.png);
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Expense Management**
+![Expense Management Design](./public/design_img/expense_management_design.png);
