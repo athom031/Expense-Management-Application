@@ -37,7 +37,14 @@ To set up and run the application, follow these steps:
 ## Design
 
 **User Management**
-![User Management Design](./public/design_img/user_management_design.png);
+![User Management Design](./public/design_img/user_management_design.png)
 
 **Expense Management**
-![Expense Management Design](./public/design_img/expense_management_design.png);
+![Expense Management Design](./public/design_img/expense_management_design.png)
+
+## Things To Add in Future
+    - Currently code assumes only one page of browser is open at a time.
+    - Supply more comprehensive visualiztions on the summary page
+        - Users Ranked by their expenses
+        - Add some sort of date value to expenses to track expenses over time
+        - Clearer differentiation between users with same name
